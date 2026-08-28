@@ -29,6 +29,10 @@ export default function StatusRail() {
   const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
+    // Deliberate: `now` stays null through SSR and the hydrating render so the
+    // server and client markup match, then fills in once we are on the client.
+    // Runs once on mount, so there is no render cascade for the rule to catch.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setNow(new Date());
     const id = setInterval(() => setNow(new Date()), 30_000);
     return () => clearInterval(id);
