@@ -1063,3 +1063,211 @@ a {
   .btn { justify-content: center; }
   .foot .push { margin-left: 0; }
 }
+
+/* ============================================================
+   TRACE — "start where you are". Additive section; the hero
+   canvas is untouched and stays the page's centrepiece.
+
+   Deliberately unlike the hero: that one loops horizontally and
+   forever, this one draws downward, once, only when asked. Same
+   family, opposite behaviour, so they read as a pair rather than
+   as the same trick twice.
+   ============================================================ */
+
+.trace { position: relative; }
+
+.trace-pick { margin: 0 0 2.5rem; }
+
+.trace-pick-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin: 0 0 0.875rem;
+}
+
+.trace-pick-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+.tracebtn {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  padding: 0.625rem 0.9375rem;
+  cursor: pointer;
+  transition: color 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+}
+
+.tracebtn:hover { color: var(--text); border-color: var(--dim); }
+
+.tracebtn.is-on {
+  color: var(--void);
+  background: var(--live);
+  border-color: var(--live);
+  box-shadow: 0 0 18px 0 rgba(var(--live-rgb), 0.35);
+}
+
+.tracebtn:focus-visible { outline: 2px solid var(--live); outline-offset: 2px; }
+
+.trace-problem {
+  margin: 0 0 2.25rem;
+  max-width: 56ch;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--dim);
+  border-left: 1px solid var(--rule);
+  padding-left: 1.125rem;
+}
+
+.trace-steps { list-style: none; margin: 0; padding: 0; }
+
+.trace-step { position: relative; }
+
+/* Connector sits between the previous node and this one. Fixed height so
+   the jog geometry stays predictable; the width stretches. */
+.trace-link {
+  display: block;
+  width: 100%;
+  max-width: 22rem;
+  height: 34px;
+}
+
+.trace-link-path {
+  fill: none;
+  stroke: var(--rule);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.trace-node {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  padding: 0.6875rem 1rem;
+  min-width: 15rem;
+}
+
+.trace-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--live);
+  flex: none;
+  box-shadow: 0 0 0 3px rgba(var(--live-rgb), 0.12), 0 0 10px 0 rgba(var(--live-rgb), 0.6);
+}
+
+.trace-label {
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  color: var(--text);
+}
+
+.trace-num {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  color: var(--dim);
+  opacity: 0.7;
+}
+
+.trace-out {
+  margin-top: 2rem;
+  padding: 1.5rem 1.625rem 1.75rem;
+  border: 1px solid var(--rule);
+  border-left: 2px solid var(--live);
+  background: var(--panel);
+  max-width: 38rem;
+}
+
+.trace-out-tag {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--live);
+}
+
+.trace-out-text {
+  margin: 0.625rem 0 0;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.trace-out-from {
+  margin: 0.75rem 0 0;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  color: var(--dim);
+}
+
+/* ---- the draw ----
+   Each step fades up and its connector draws itself, staggered by index.
+   pathLength=1 on the path means dasharray:1 is the whole length whatever
+   the real geometry works out to. */
+@media (prefers-reduced-motion: no-preference) {
+  .trace-node,
+  .trace-out {
+    animation: traceRise 0.42s ease both;
+    animation-delay: calc(var(--i) * 130ms);
+  }
+
+  .trace-link-path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: traceDraw 0.34s ease-out both;
+    animation-delay: calc(var(--i) * 130ms - 60ms);
+  }
+
+  .trace-dot {
+    animation: traceLight 0.5s ease both;
+    animation-delay: calc(var(--i) * 130ms + 120ms);
+  }
+}
+
+@keyframes traceDraw {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes traceRise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes traceLight {
+  from { box-shadow: 0 0 0 0 rgba(var(--live-rgb), 0), 0 0 0 0 rgba(var(--live-rgb), 0); }
+  to   { box-shadow: 0 0 0 3px rgba(var(--live-rgb), 0.12), 0 0 10px 0 rgba(var(--live-rgb), 0.6); }
+}
+
+/* Descending board traces behind the section — the reference image, at a
+   weight that stays background. Pure decoration, never announced. */
+.trace-field {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+.trace-field path { fill: none; stroke: var(--rule); stroke-width: 1; }
+.trace-field circle { fill: var(--live); opacity: 0.55; }
+
+.tracewrap { position: relative; }
+.tracewrap > .col { position: relative; z-index: 1; }
+
+@media (max-width: 640px) {
+  .trace-node { min-width: 0; width: 100%; }
+  .trace-link { max-width: 12rem; }
+  .trace-problem { padding-left: 0.875rem; }
+}

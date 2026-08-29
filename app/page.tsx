@@ -1,6 +1,8 @@
 import SiteHeader from "./site-header";
 import PipelineCanvas from "./pipeline-canvas";
 import Systems from "./systems";
+import Trace from "./trace";
+import TraceField from "./trace-field";
 import TypeHead from "./type-head";
 import { CAPS, AREA_LABEL, EXPLORING } from "./work";
 
@@ -81,10 +83,26 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="explore" id="explore">
+      <section className="modules tracewrap" id="trace">
+        <TraceField />
         <div className="col">
           <TypeHead
             idx="S02"
+            text="Start where you are"
+            meta="Pick a situation · watch the build"
+          />
+          <p className="sec-intro">
+            Every one of these is a pipeline I have actually built and run.
+            Pick the one that sounds like your week.
+          </p>
+          <Trace />
+        </div>
+      </section>
+
+      <section className="explore" id="explore">
+        <div className="col">
+          <TypeHead
+            idx="S03"
             text="Exploring"
             meta="Where the next builds are going"
           />
@@ -104,7 +122,7 @@ export default function Home() {
 
       <section className="terms" id="terms">
         <div className="col">
-          <TypeHead idx="S03" text="How it works" meta="Engagement terms" />
+          <TypeHead idx="S04" text="How it works" meta="Engagement terms" />
           <div className="terms-grid">
             <div className="term bracket">
               <h4><em>01</em>White label</h4>
