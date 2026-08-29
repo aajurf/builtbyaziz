@@ -2,7 +2,7 @@ import SiteHeader from "./site-header";
 import PipelineCanvas from "./pipeline-canvas";
 import Systems from "./systems";
 import TypeHead from "./type-head";
-import { MODS, EXPLORING } from "./work";
+import { CAPS, AREA_LABEL, EXPLORING } from "./work";
 
 const CAL = "https://cal.com/contactlnp/30min";
 const EMAIL = "aziz@builtbyaziz.com";
@@ -17,7 +17,7 @@ const CAPABILITIES = [
 ];
 
 export default function Home() {
-  const live = MODS.filter((m) => m.state === "live").length;
+  const areas = Object.keys(AREA_LABEL).length;
 
   return (
     <>
@@ -70,9 +70,13 @@ export default function Home() {
         <div className="col">
           <TypeHead
             idx="S01"
-            text="Systems"
-            meta={`${MODS.length} built · ${live} in production`}
+            text="Capabilities"
+            meta={`${areas} areas · ${CAPS.length} capabilities`}
           />
+          <p className="sec-intro">
+            What I build, and what you end up with. Most of it has shipped
+            already — where it has, the tile names the build it came out of.
+          </p>
           <Systems />
         </div>
       </section>
