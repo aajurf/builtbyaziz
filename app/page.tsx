@@ -92,8 +92,9 @@ export default function Home() {
             meta="Pick a situation · watch the build"
           />
           <p className="sec-intro">
-            Every one of these is a pipeline I have actually built and run.
-            Pick the one that sounds like your week.
+            Pick the one that sounds like your week. Most of these are pipelines
+            I have already built and run — where one is, the outcome names the
+            build it came out of.
           </p>
           <Trace />
         </div>

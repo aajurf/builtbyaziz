@@ -10,14 +10,15 @@ type Scenario = {
   problem: string;
   steps: string[];
   outcome: string;
-  /** The delivered build this pipeline is drawn from. */
-  from: string;
+  /**
+   * "proven" must name the delivered build in `from`. "ready" says plainly
+   * that there is nothing public to point at — no scenario here implies work
+   * that does not exist.
+   */
+  proof: "proven" | "ready";
+  from?: string;
 };
 
-/**
- * Every pipeline here is a real one. Nothing in this section describes a
- * system that has not been built and run.
- */
 const SCENARIOS: Scenario[] = [
   {
     id: "leads",
@@ -26,6 +27,7 @@ const SCENARIOS: Scenario[] = [
       "Enquiries land in an inbox and sit there. Some get answered in hours, some never get logged at all.",
     steps: ["Form submit", "Validate", "Score", "Write to CRM", "Auto-reply", "Team alert"],
     outcome: "Every lead answered in under thirty seconds, scored before anyone opens it.",
+    proof: "proven",
     from: "Lead capture and response",
   },
   {
@@ -35,6 +37,7 @@ const SCENARIOS: Scenario[] = [
       "One long recording should become twenty pieces of content. By hand it costs most of a working day.",
     steps: ["Ingest", "Transcribe", "Find moments", "Reframe 9:16", "Burn captions", "Clips out"],
     outcome: "A day of editing becomes a queue that runs itself, with no per-minute vendor bill.",
+    proof: "proven",
     from: "Video processing at scale",
   },
   {
@@ -44,7 +47,40 @@ const SCENARIOS: Scenario[] = [
       "The same fifteen steps every time a client signs. Copy the details, write the welcome, tell the team, remember to close it out.",
     steps: ["Approve", "Create record", "Carry fields", "Welcome", "Internal brief", "Close out"],
     outcome: "Three hours of manual work per client down to fifteen minutes of review.",
+    proof: "proven",
     from: "Onboarding and handoff sequences",
+  },
+  {
+    id: "saas",
+    entry: "A SaaS to build",
+    problem:
+      "You have the product and the customers. What you do not have is the platform underneath — accounts, billing, and the long jobs that must not block the interface.",
+    steps: ["Sign up", "Workspace", "Billing", "Job queue", "Usage meter", "Dashboard"],
+    outcome:
+      "A product your customers log into, metered per use, with the heavy work off the critical path.",
+    proof: "proven",
+    from: "Pinnaclicks — queue architecture, credit metering and multi-platform publishing",
+  },
+  {
+    id: "agents",
+    entry: "Agents that must act",
+    problem:
+      "An agent that only chats is a demo. To be worth anything it has to read your real material and write back into the systems your team already uses.",
+    steps: ["Ground", "Retrieve", "Reason", "Act", "Write back", "Escalate"],
+    outcome:
+      "Agents working from one source of truth, acting in your systems, handing to a person when it matters.",
+    proof: "proven",
+    from: "Command Vault — people and agents on one source of truth",
+  },
+  {
+    id: "payments",
+    entry: "Money to move",
+    problem:
+      "Funds move through your business and you carry the liability for money you never wanted to hold in the first place.",
+    steps: ["Payer", "Route", "Payee account", "Ledger", "Reconcile", "Report"],
+    outcome: "Money routed and recorded end to end, without your business taking custody of it.",
+    proof: "proven",
+    from: "A brokerage platform moving rent straight from tenant to owner",
   },
   {
     id: "cameras",
@@ -53,7 +89,27 @@ const SCENARIOS: Scenario[] = [
       "The footage cannot leave the premises. Data residency, patchy connectivity and latency all rule out a cloud API.",
     steps: ["Camera", "Edge inference", "Ensemble vote", "Rules layer", "Anchor", "Alert"],
     outcome: "Detection running on your own hardware. Footage never leaves the building.",
-    from: "Detection models on your own hardware",
+    proof: "proven",
+    from: "Qamara Intel — detection and spatial anchoring, running on site",
+  },
+  {
+    id: "documents",
+    entry: "Documents to key in",
+    problem:
+      "PDFs, forms and email attachments arrive, and somebody retypes them into a system by hand every single day.",
+    steps: ["Intake", "Extract", "Validate", "Route the unsure", "Write record"],
+    outcome:
+      "Structured records straight into your systems, with only the uncertain ones sent to a person.",
+    proof: "ready",
+  },
+  {
+    id: "releases",
+    entry: "Releases breaking things",
+    problem:
+      "Every deploy is a held breath. Something that worked last week quietly stops working, and a customer finds it before you do.",
+    steps: ["Commit", "Build", "Test suite", "Smoke run", "Gate", "Deploy"],
+    outcome: "A pipeline that blocks the release, instead of a customer finding the bug for you.",
+    proof: "ready",
   },
 ];
 
@@ -133,7 +189,9 @@ export default function Trace() {
           <span className="trace-out-tag">Outcome</span>
           <p className="trace-out-text">{scenario.outcome}</p>
           <p className="trace-out-from">
-            Drawn from a build that shipped — {scenario.from}.
+            {scenario.proof === "proven"
+              ? `Drawn from a build that shipped — ${scenario.from}.`
+              : "Built to order. No public example to point at yet."}
           </p>
         </div>
       </div>

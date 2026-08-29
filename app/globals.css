@@ -263,6 +263,9 @@ a {
   .tile-state .led-sm {
     animation: none;
   }
+  /* The travelling sparks are pure motion with no information in them,
+     so they go entirely rather than being slowed down. */
+  .tf-spark { display: none; }
   .mark-dot { opacity: 1; box-shadow: 0 0 6px 0 rgba(var(--live-rgb), 0.5); }
   .tile-state.is-proven .led-sm { box-shadow: 0 0 0 3px rgba(var(--live-rgb), 0.15); }
   .tile-state.is-ready .led-sm { box-shadow: 0 0 0 3px rgba(var(--build-rgb), 0.15); }
@@ -402,12 +405,13 @@ a {
    SECTION HEADS
    ============================================================ */
 
+/* No divider rule. The chip and the mono heading already separate the
+   section; the full-width line only cut the page into strips. */
 .sec-head {
   display: flex;
   align-items: center;
   gap: 1rem;
   padding: 0 0 1.25rem;
-  border-bottom: 1px solid var(--rule);
   margin: 0 0 2.25rem;
 }
 
@@ -419,20 +423,23 @@ a {
   background: var(--live);
   padding: 0.25rem 0.5rem;
   flex: none;
-  /* steps(1) so it snaps between states — a terminal blink, never a fade */
-  animation: secBeep 1.15s steps(1) infinite;
+  /* Was a steps(1) terminal blink. Now it swells to full and falls away
+     again on a slow ease, so it reads as breathing rather than ticking. */
+  animation: secGlow 4s ease-in-out infinite;
 }
 
-@keyframes secBeep {
-  0%, 62% {
+@keyframes secGlow {
+  0%, 100% {
+    background: rgba(var(--live-rgb), 0.14);
+    color: var(--live);
+    box-shadow: inset 0 0 0 1px rgba(var(--live-rgb), 0.35);
+  }
+  50% {
     background: var(--live);
     color: var(--void);
-    box-shadow: 0 0 12px 0 rgba(var(--live-rgb), 0.55);
-  }
-  63%, 100% {
-    background: transparent;
-    color: var(--live);
-    box-shadow: inset 0 0 0 1px rgba(var(--live-rgb), 0.5);
+    box-shadow:
+      0 0 22px 0 rgba(var(--live-rgb), 0.6),
+      inset 0 0 0 1px rgba(var(--live-rgb), 1);
   }
 }
 
@@ -1292,15 +1299,38 @@ a {
   opacity: 0.5;
 }
 
-.trace-field path {
-  fill: none;
+.trace-field path { fill: none; }
+
+.tf-line {
   stroke: rgba(var(--live-rgb), 0.16);
   stroke-width: 1;
 }
 
-/* Only the pads glow. Putting a drop-shadow on all sixteen traces as well
-   would cost more than a background is worth. */
-.trace-field circle {
+/* A short lit segment travelling down each trace. dasharray is expressed
+   against pathLength=1, so one dash is 9% of the line whatever its real
+   length, and the offset carries it from the top clean off the bottom.
+   Durations and delays are staggered per trace so they never march in step. */
+.tf-spark {
+  stroke: var(--live);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 0.09 0.91;
+  filter: drop-shadow(0 0 5px rgba(var(--live-rgb), 0.9));
+  animation-name: tfSpark;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes tfSpark {
+  from { stroke-dashoffset: 1; opacity: 0; }
+  8%   { opacity: 1; }
+  85%  { opacity: 1; }
+  to   { stroke-dashoffset: -0.09; opacity: 0; }
+}
+
+/* Only the pads carry a standing glow. A drop-shadow on all sixteen base
+   traces as well would cost more than a background is worth. */
+.tf-pad {
   fill: var(--live);
   opacity: 0.6;
   filter: drop-shadow(0 0 4px rgba(var(--live-rgb), 0.8));

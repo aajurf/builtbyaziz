@@ -73,10 +73,26 @@ export default function TraceField() {
     >
       {LINES.map((l, i) => {
         const { d, ex, ey } = build(l);
+        // Staggered so the sparks never march in step. Authored rather than
+        // random for the same reason the geometry is: a Math.random here
+        // would disagree between the server and the client render.
+        const delay = ((i * 1237) % 900) / 100;
+        const dur = 3.4 + ((i * 613) % 260) / 100;
         return (
           <g key={i}>
-            <path d={d} />
-            {l.dot && <circle cx={ex} cy={ey} r={2.6} />}
+            <path className="tf-line" d={d} />
+            <path
+              className="tf-spark"
+              d={d}
+              pathLength={1}
+              style={
+                {
+                  animationDelay: `${delay}s`,
+                  animationDuration: `${dur}s`,
+                } as React.CSSProperties
+              }
+            />
+            {l.dot && <circle className="tf-pad" cx={ex} cy={ey} r={2.6} />}
           </g>
         );
       })}
