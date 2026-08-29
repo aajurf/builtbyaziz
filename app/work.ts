@@ -81,9 +81,9 @@ export const CAPS: Capability[] = [
   {
     area: "ai",
     proof: "proven",
-    title: "Grounded support assistants",
+    title: "Customer-facing support assistants",
     outcome:
-      "Answers drawn from your own material, with a human brought in before it ever guesses.",
+      "Your support queue answered in seconds, around the clock, without a bot inventing your policy.",
     delivers: [
       "Grounded in your knowledge base, not the open internet",
       "Memory across a conversation, not one-shot replies",
@@ -96,9 +96,9 @@ export const CAPS: Capability[] = [
   {
     area: "ai",
     proof: "proven",
-    title: "Knowledge bases agents can use",
+    title: "The knowledge layer agents run on",
     outcome:
-      "One source of truth that your people and your agents both read and write.",
+      "The plumbing every other agent depends on: one store your team and your tools both write to.",
     delivers: [
       "Multi-tenant store the team edits in a normal notes app",
       "Two-way sync between local machines and the server",

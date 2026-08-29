@@ -62,6 +62,17 @@ const SCENARIOS: Scenario[] = [
     from: "Pinnaclicks — queue architecture, credit metering and multi-platform publishing",
   },
   {
+    id: "bookings",
+    entry: "Bookings in spreadsheets",
+    problem:
+      "Listings sit on one site, the calendar on another, guest messages in a third. Nobody sees the whole portfolio at once, and every property gets run one browser tab at a time.",
+    steps: ["Browse", "Live availability", "Book", "Confirm", "Portfolio view"],
+    outcome:
+      "Guests book themselves in while you run every unit in the portfolio from one screen.",
+    proof: "proven",
+    from: "Mustaqir SA — a short-stay platform for the Saudi market, guest booking and full portfolio administration in one system",
+  },
+  {
     id: "agents",
     entry: "Agents that must act",
     problem:
