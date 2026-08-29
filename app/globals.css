@@ -531,9 +531,13 @@ a {
   transition: color 0.16s ease, border-color 0.16s ease, background 0.16s ease;
 }
 
+/* Same --rule problem. `inherit` rather than a fixed colour so the count
+   stays legible both on the dark chip and on the green active one, where
+   the text flips to --void. */
 .chipbtn em {
   font-style: normal;
-  color: var(--rule);
+  color: inherit;
+  opacity: 0.65;
   font-size: 0.625rem;
 }
 
@@ -903,10 +907,12 @@ a {
   margin: 0 0 1rem;
 }
 
+/* Was --rule, a border colour, which is ~1.4:1 on --void — the numeral was
+   there but unreadable. White against the green label reads as a counter. */
 .term h4 em {
   font-style: normal;
-  color: var(--rule);
-  font-size: 0.625rem;
+  color: var(--text);
+  font-size: 0.6875rem;
 }
 
 .term p {
