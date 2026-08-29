@@ -367,30 +367,28 @@ a {
 
 .bracket { position: relative; }
 
-.bracket::before,
-.bracket::after {
+/* Was a pair of 13px corner ticks. They sat directly on top of the panel's
+   own border, so all you saw was the stub that overhung it — a stray line
+   rather than a corner. Replaced with a glow on the whole edge, which is
+   what the corners were reaching for anyway. */
+.bracket::before {
   content: "";
   position: absolute;
-  width: 13px;
-  height: 13px;
-  border-color: var(--live);
-  opacity: 0.5;
+  inset: -1px;
   pointer-events: none;
-  transition: opacity 0.2s ease, width 0.2s ease, height 0.2s ease;
+  border: 1px solid rgba(var(--live-rgb), 0.2);
+  box-shadow: inset 0 0 28px -14px rgba(var(--live-rgb), 0.45);
+  opacity: 0.75;
+  transition: opacity 0.24s ease, border-color 0.24s ease, box-shadow 0.3s ease;
 }
 
-.bracket::before {
-  top: -1px; left: -1px;
-  border-top: 1px solid; border-left: 1px solid;
+.bracket:hover::before {
+  opacity: 1;
+  border-color: rgba(var(--live-rgb), 0.55);
+  box-shadow:
+    0 0 28px -6px rgba(var(--live-rgb), 0.4),
+    inset 0 0 32px -12px rgba(var(--live-rgb), 0.55);
 }
-
-.bracket::after {
-  bottom: -1px; right: -1px;
-  border-bottom: 1px solid; border-right: 1px solid;
-}
-
-.bracket:hover::before,
-.bracket:hover::after { opacity: 1; width: 20px; height: 20px; }
 
 .gridskin {
   background-image:
@@ -1136,11 +1134,15 @@ a {
   height: 34px;
 }
 
+/* The trace carries current, so it is tinted live and lit rather than drawn
+   in the flat border colour. --rule left it looking dead. */
 .trace-link-path {
   fill: none;
-  stroke: var(--rule);
+  stroke: rgba(var(--live-rgb), 0.4);
   stroke-width: 1.5;
   vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 3px rgba(var(--live-rgb), 0.35));
+  transition: stroke 0.2s ease, filter 0.2s ease;
 }
 
 .trace-node {
@@ -1152,7 +1154,37 @@ a {
   border: 1px solid var(--rule);
   padding: 0.6875rem 1rem;
   min-width: 15rem;
+  box-shadow: inset 0 0 24px -16px rgba(var(--live-rgb), 0.6);
+  transition: border-color 0.2s ease, box-shadow 0.24s ease,
+    background 0.2s ease, transform 0.2s ease;
 }
+
+/* Hover lights the whole segment — the node and the trace feeding into it —
+   so the pointer reads as following current through the board. */
+.trace-step:hover .trace-node {
+  border-color: rgba(var(--live-rgb), 0.6);
+  background: var(--panel-2);
+  transform: translateX(2px);
+  box-shadow:
+    0 0 26px -8px rgba(var(--live-rgb), 0.45),
+    inset 0 0 30px -14px rgba(var(--live-rgb), 0.7);
+}
+
+.trace-step:hover .trace-link-path {
+  stroke: rgba(var(--live-rgb), 0.95);
+  filter: drop-shadow(0 0 6px rgba(var(--live-rgb), 0.75));
+}
+
+.trace-step:hover .trace-label { color: #fff; }
+
+.trace-step:hover .trace-dot {
+  box-shadow:
+    0 0 0 4px rgba(var(--live-rgb), 0.16),
+    0 0 16px 2px rgba(var(--live-rgb), 0.95);
+}
+
+.trace-dot,
+.trace-label { transition: box-shadow 0.24s ease, color 0.2s ease; }
 
 .trace-dot {
   width: 6px; height: 6px; border-radius: 50%;
@@ -1260,8 +1292,19 @@ a {
   opacity: 0.5;
 }
 
-.trace-field path { fill: none; stroke: var(--rule); stroke-width: 1; }
-.trace-field circle { fill: var(--live); opacity: 0.55; }
+.trace-field path {
+  fill: none;
+  stroke: rgba(var(--live-rgb), 0.16);
+  stroke-width: 1;
+}
+
+/* Only the pads glow. Putting a drop-shadow on all sixteen traces as well
+   would cost more than a background is worth. */
+.trace-field circle {
+  fill: var(--live);
+  opacity: 0.6;
+  filter: drop-shadow(0 0 4px rgba(var(--live-rgb), 0.8));
+}
 
 .tracewrap { position: relative; }
 .tracewrap > .col { position: relative; z-index: 1; }
