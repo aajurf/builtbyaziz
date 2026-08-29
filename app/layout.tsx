@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: "Aziz Eljurf — Automation and AI infrastructure",
   description:
-    "I build automation and AI infrastructure that agencies resell under their own name. n8n, Claude API, Python, Next.js. US citizen, US business hours.",
+    "I build automation and AI infrastructure that agencies resell under their own name. n8n, Claude API, Python, Next.js. US citizen, working your hours in your time zone.",
   alternates: { canonical: "/" },
   openGraph: {
     title: "Aziz Eljurf — Automation and AI infrastructure",
@@ -61,7 +61,22 @@ export default function RootLayout({
       lang="en"
       className={`${sora.variable} ${inter.variable} ${mono.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        {/* Typed headings render empty until their effect runs, so without JS
+            they would be blank. Fall back to the plain text instead. */}
+        <noscript>
+          <style>{`
+            .sec-type-vis { display: none !important; }
+            .sec-type .sr-only {
+              position: static !important;
+              width: auto !important; height: auto !important;
+              margin: 0 !important; clip-path: none !important;
+              white-space: normal !important;
+            }
+          `}</style>
+        </noscript>
+        {children}
+      </body>
     </html>
   );
 }

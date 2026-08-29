@@ -1,14 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { MODS, STATE_LABEL, type Mod } from "./work";
+import { MODS, STATE_LABEL, KIND_LABEL, type Kind, type Mod } from "./work";
 
 const FILTERS: { key: string; label: string; match: (m: Mod) => boolean }[] = [
   { key: "all", label: "All", match: () => true },
-  { key: "live", label: "Production", match: (m) => m.state === "live" },
-  { key: "shipped", label: "Shipped", match: (m) => m.state === "shipped" },
-  { key: "building", label: "In build", match: (m) => m.state === "building" },
-  { key: "rnd", label: "Research", match: (m) => m.state === "rnd" },
+  ...(Object.keys(KIND_LABEL) as Kind[]).map((k) => ({
+    key: k,
+    label: KIND_LABEL[k],
+    match: (m: Mod) => m.kind === k,
+  })),
 ];
 
 export default function Systems() {
@@ -69,11 +70,7 @@ export default function Systems() {
                 aria-expanded={isOpen}
               >
                 <span className="tile-bar">
-                  <span
-                    className={
-                      m.state === "live" ? "tile-state is-live" : "tile-state"
-                    }
-                  >
+                  <span className={`tile-state is-${m.state}`}>
                     <span className="led-sm" aria-hidden="true" />
                     {STATE_LABEL[m.state]}
                   </span>

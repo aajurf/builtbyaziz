@@ -1,5 +1,10 @@
+export type Kind = "automation" | "ai" | "product" | "vision";
+
 export type Mod = {
-  state: "live" | "shipped" | "building" | "rnd";
+  /** Running state — drives the LED colour only, not the filters. */
+  state: "live" | "shipped" | "building";
+  /** What the build actually is — this is the filter axis. */
+  kind: Kind;
   title: string;
   body: string[];
   pipeline: string[];
@@ -12,12 +17,39 @@ export const STATE_LABEL: Record<Mod["state"], string> = {
   live: "Running in production",
   shipped: "Shipped",
   building: "In build",
-  rnd: "Research",
 };
+
+export const KIND_LABEL: Record<Kind, string> = {
+  automation: "Automation",
+  ai: "AI and agents",
+  product: "Full-stack product",
+  vision: "Vision",
+};
+
+/** Areas I am building into next. Named by area, not by client or product. */
+export const EXPLORING: { label: string; note: string }[] = [
+  {
+    label: "AR and spatial vision",
+    note: "Detections anchored to real-world position and drawn in place on a live camera feed.",
+  },
+  {
+    label: "3D digital twins",
+    note: "Standing sites and facilities up as live models fed by their own sensors and cameras.",
+  },
+  {
+    label: "Edge inference hardware",
+    note: "Multi-sensor rigs that run their models on site, for work where footage cannot leave the premises.",
+  },
+  {
+    label: "Custom model training",
+    note: "Models trained on a client's own material rather than bent into shape with prompting.",
+  },
+];
 
 export const MODS: Mod[] = [
   {
     state: "live",
+    kind: "automation",
     title: "Lead capture, scoring and CRM pipeline",
     body: [
       "Inbound leads used to sit in an inbox until somebody got to them. Response times ran into hours and some leads were never logged at all.",
@@ -29,6 +61,7 @@ export const MODS: Mod[] = [
   },
   {
     state: "live",
+    kind: "automation",
     title: "Client onboarding autopilot",
     body: [
       "Onboarding meant the same fifteen manual steps every time. Copy the details across, write the welcome, notify the team, remember to mark it done.",
@@ -40,6 +73,7 @@ export const MODS: Mod[] = [
   },
   {
     state: "live",
+    kind: "ai",
     title: "Support chatbot on self-hosted inference",
     body: [
       "Off-the-shelf chatbots either invent answers about your business or meter you per message at a rate that breaks the moment volume arrives.",
@@ -51,6 +85,7 @@ export const MODS: Mod[] = [
   },
   {
     state: "live",
+    kind: "ai",
     title: "Command Vault — shared knowledge base for AI agents",
     body: [
       "An agent is only as useful as what it can read, and most teams keep their knowledge scattered across drives, inboxes and people's heads.",
@@ -62,6 +97,7 @@ export const MODS: Mod[] = [
   },
   {
     state: "building",
+    kind: "product",
     title: "Property management platform for a California brokerage",
     body: [
       "Property software takes custody of rent. The money sits in a third party's account, payouts lag, and the brokerage carries liability for funds it never sees.",
@@ -74,6 +110,19 @@ export const MODS: Mod[] = [
   },
   {
     state: "shipped",
+    kind: "product",
+    title: "Mustaqir SA — short-stay booking platform",
+    body: [
+      "Short-stay hosting runs on a patchwork of listing sites, spreadsheets and message threads. The operator never sees the whole portfolio in one place, and every property is managed one tab at a time.",
+      "Mustaqir puts guest-facing booking and operator control in the same system. Guests browse properties, check real availability and book. Behind that sits an admin dashboard covering the whole portfolio: listings and pricing, the booking calendar, guest records and the revenue view, so the operator runs every unit from one screen instead of chasing each one separately.",
+    ],
+    pipeline: ["Browse", "Availability", "Book", "Confirm", "Admin dashboard"],
+    runtime: ["Next.js", "TypeScript", "Supabase", "Stripe"],
+    outcome: "Guest booking and full portfolio administration in a single platform.",
+  },
+  {
+    state: "shipped",
+    kind: "product",
     title: "Pinnaclicks — content repurposing platform",
     body: [
       "One long video should become twenty pieces of content. By hand that costs most of a working day.",
@@ -85,6 +134,7 @@ export const MODS: Mod[] = [
   },
   {
     state: "shipped",
+    kind: "vision",
     title: "Video processing microservice",
     body: [
       "Turning landscape video into vertical clips means either cropping blind and cutting the speaker's head off, or paying a vendor per minute of footage.",
@@ -95,15 +145,16 @@ export const MODS: Mod[] = [
     outcome: "Face-tracked reframing and five caption styles with no per-minute cost.",
   },
   {
-    state: "rnd",
+    state: "live",
+    kind: "vision",
     title: "Qamara Intel — computer vision at the edge",
     body: [
       "Some vision work cannot leave the site. Data residency, patchy connectivity and latency all rule out shipping frames to a cloud API.",
-      "Detection models run locally on the customer's own hardware so footage never leaves the premises. Includes a georeferenced AR overlay that renders buried utility lines in position on a live camera feed, plus sensor selection and hardware specification for multi-sensor rigs.",
+      "Detection models run locally on the customer's own hardware so footage never leaves the premises. Around the detection layer sits an ensemble that votes across models, a rules engine written to local operating standards, and per-deployment licensing. Includes a georeferenced AR overlay that renders buried utility lines in position on a live camera feed, plus sensor selection and hardware specification for multi-sensor rigs.",
     ],
-    pipeline: ["Camera", "Edge inference", "Geo-anchor", "AR overlay"],
-    runtime: ["Python", "YOLOv8", "Faster R-CNN", "OpenCV", "GPS anchoring"],
-    outcome: "Detection, spatial anchoring and hardware specification, built in-house.",
-    scope: "My own venture. No external clients.",
+    pipeline: ["Camera", "Edge inference", "Ensemble vote", "Rules", "Geo-anchor", "AR overlay"],
+    runtime: ["Python", "YOLOv8", "Faster R-CNN", "OpenCV", "GPS anchoring", "Licensing"],
+    outcome: "Detection, spatial anchoring and hardware specification, deployed and running on site.",
+    scope: "My own venture, running in production.",
   },
 ];

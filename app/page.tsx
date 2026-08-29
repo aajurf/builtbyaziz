@@ -1,7 +1,8 @@
 import SiteHeader from "./site-header";
 import PipelineCanvas from "./pipeline-canvas";
 import Systems from "./systems";
-import { MODS } from "./work";
+import TypeHead from "./type-head";
+import { MODS, EXPLORING } from "./work";
 
 const CAL = "https://cal.com/contactlnp/30min";
 const EMAIL = "aziz@builtbyaziz.com";
@@ -34,8 +35,8 @@ export default function Home() {
           <p className="tagline">
             I build the systems agencies resell under their own name.
             <span>
-              Fixed scope, fixed price, working 9 to 6 Eastern. Your client never
-              sees a handoff.
+              Fixed scope, fixed price, and I work your hours in your time zone.
+              Your client never sees a handoff.
             </span>
           </p>
           <div className="actions">
@@ -67,24 +68,39 @@ export default function Home() {
 
       <section className="modules" id="work">
         <div className="col">
-          <div className="sec-head">
-            <span className="sec-idx">S01</span>
-            <h2>Systems</h2>
-            <span className="sec-meta">
-              {MODS.length} built &middot; {live} in production
-            </span>
-          </div>
+          <TypeHead
+            idx="S01"
+            text="Systems"
+            meta={`${MODS.length} built · ${live} in production`}
+          />
           <Systems />
+        </div>
+      </section>
+
+      <section className="explore" id="explore">
+        <div className="col">
+          <TypeHead
+            idx="S02"
+            text="Exploring"
+            meta="Where the next builds are going"
+          />
+          <ul className="explore-grid">
+            {EXPLORING.map((e, i) => (
+              <li className="explore-item" key={e.label}>
+                <span className="explore-idx" aria-hidden="true">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3>{e.label}</h3>
+                <p>{e.note}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
       <section className="terms" id="terms">
         <div className="col">
-          <div className="sec-head">
-            <span className="sec-idx">S02</span>
-            <h2>How it works</h2>
-            <span className="sec-meta">Engagement terms</span>
-          </div>
+          <TypeHead idx="S03" text="How it works" meta="Engagement terms" />
           <div className="terms-grid">
             <div className="term bracket">
               <h4><em>01</em>White label</h4>
@@ -103,8 +119,9 @@ export default function Home() {
             <div className="term bracket">
               <h4><em>03</em>Your hours</h4>
               <p>
-                I work 9 to 6 Eastern. Questions get answered the same day, not
-                the next morning your time.
+                Pacific, Mountain, Central, Eastern or further out — I run my day
+                on your clock. Questions get answered the same day, not the next
+                morning your time.
               </p>
             </div>
           </div>

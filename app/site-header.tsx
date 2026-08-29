@@ -22,6 +22,7 @@ export default function SiteHeader() {
       </a>
       <nav className="topnav">
         <a href="#work">Work</a>
+        <a href="#explore">Exploring</a>
         <a href="#terms">How it works</a>
       </nav>
       <a
