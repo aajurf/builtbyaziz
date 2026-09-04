@@ -110,6 +110,21 @@ export const CAPS: Capability[] = [
   },
   {
     area: "ai",
+    proof: "proven",
+    title: "Lead triage that reads the free text",
+    outcome:
+      "Every enquiry scored, summarised and routed the moment it lands, from the prose a prospect actually typed.",
+    delivers: [
+      "Scored and summarised before a rep opens the record",
+      "Reads whichever fields already hold your unstructured text",
+      "Routing rules you change without a deployment",
+      "Your provider account and your key — the inference bill stays yours",
+    ],
+    provenIn:
+      "AI Lead Triage — the Industry field empty on every demo record, and it still knew which one was an eleven-practice dental group against a compliance deadline.",
+  },
+  {
+    area: "ai",
     proof: "ready",
     title: "Document and intake processing",
     outcome:

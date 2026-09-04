@@ -31,6 +31,17 @@ const SCENARIOS: Scenario[] = [
     from: "Lead capture and response",
   },
   {
+    id: "triage",
+    entry: "Leads nobody has read",
+    problem:
+      "Every enquiry arrives as a paragraph of prose. Somebody has to read all of them to find the three worth calling today.",
+    steps: ["Lead lands", "Read the text", "Score", "Summarise", "Route", "Rep opens it"],
+    outcome:
+      "The three worth calling sit at the top, with the reason written underneath them.",
+    proof: "proven",
+    from: "Lead triage that reads the free text",
+  },
+  {
     id: "video",
     entry: "Hours of raw video",
     problem:
