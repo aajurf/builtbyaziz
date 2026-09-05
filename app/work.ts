@@ -137,6 +137,20 @@ export const CAPS: Capability[] = [
     ],
   },
 
+  {
+    area: "ai",
+    proof: "ready",
+    title: "Voice agents that answer the phone",
+    outcome:
+      "The calls nobody picks up answered, qualified and booked, instead of a voicemail no one returns.",
+    delivers: [
+      "Answers every call on the first ring, including out of hours",
+      "Qualifies against your criteria, not a generic script",
+      "Books straight into the calendar the team already uses",
+      "Hands to a person mid-call when it should, context attached",
+    ],
+  },
+
   // ---------- full-stack product ----------
   {
     area: "product",
