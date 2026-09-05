@@ -1,0 +1,50 @@
+# Builds the site on every push, so a broken build cannot reach the live site.
+#
+# This repository has no deploy workflow of its own — the host builds from the
+# git integration when main moves. That means nothing sits between a push and
+# the site that is linked in outbound messages. This job is that something.
+#
+# No org, no secret, no cost. `next build` runs the TypeScript check as part of
+# the build, so a type error in a data file — the most likely way an entry added
+# to work.ts or trace.tsx breaks — fails here rather than in production.
+
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# A second push supersedes the first rather than queueing behind it.
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: next build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+
+      # `npm ci` rather than `npm install`: it installs exactly what
+      # package-lock.json pins and fails if the two have drifted.
+      - run: npm ci
+
+      # Lint before build. It is the cheaper of the two and catches a different
+      # class of problem, so running it first means a lint error does not wait
+      # behind a full compile.
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
